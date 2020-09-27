@@ -1,20 +1,32 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Simple chat
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+<ion-content #content>
+  <div class="reply-container" *ngFor="let reply of replies">
+    <div [ngClass]="{'reply': true, 'self-reply': reply.nickname === userName}">
+      <span class="reply-nickname">
+        {{ reply.nickname }}: 
+      </span>
+      <span class="reply-message">
+        {{ reply.message }}
+      </span>
+    </div>
+  </div> 
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="send-container">
+      <ion-input 
+        placeholder="Message"
+        inputmode="text"
+        [(ngModel)]="currentMessage"></ion-input>
+      <ion-button (click)="send()">Send</ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>
