@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { environment } from '../../environments/environment';
 import * as io from 'socket.io-client';
 
 @Component({
@@ -19,10 +20,10 @@ export class HomePage {
   private socket: SocketIOClient.Socket;
 
   constructor() {
-    this.userName = 'usual_one';
+    this.userName = environment.chatUsername;
     this.currentMessage = "";
     this.replies = [];
-    this.socket = io.connect('http://89.178.239.84:8888');
+    this.socket = io.connect(`${environment.backendHost}:${environment.backendPort}`);
   }
 
   ngOnInit() {
@@ -56,5 +57,6 @@ export class HomePage {
 
   public receive(reply): void {
     this.replies.push(reply);
+    this.scrollToBottom();
   }
 }
