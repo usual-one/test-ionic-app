@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Simple map</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="map_canvas">
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-lable *ngIf="latitude && longitude">
+      {{ latitude }}, {{ longitude }}
+    </ion-lable>
+  </ion-toolbar>
+</ion-footer>
