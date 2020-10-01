@@ -11,22 +11,19 @@ export class HomePage {
 
   @ViewChild('content') private content: any;
 
-  public userName: string;
+  public userName: string = environment.chatUsername;
 
-  public currentMessage: string;
+  public currentMessage = "";
   
-  public replies: object[];
+  public replies: object[] = [];
 
   private socket: SocketIOClient.Socket;
 
-  constructor() {
-    this.userName = environment.chatUsername;
-    this.currentMessage = "";
-    this.replies = [];
-    this.socket = io.connect(`${environment.backendHost}:${environment.backendPort}`);
-  }
+  constructor() {}
 
   ngOnInit() {
+    this.socket = io.connect(`${environment.backendHost}:${environment.backendPort}`);
+
     this.socket.on('connect', () => {});
 
     this.socket.on('messageToClient', reply => {
@@ -43,13 +40,13 @@ export class HomePage {
     this.currentMessage = "";
   }
 
-  public sendMessage(_message: string): void {
-    if (!_message) {
+  public sendMessage(message: string): void {
+    if (!message) {
       return;
     }
     const reply = {
       nickname: this.userName,
-      message: _message
+      message
     };
     this.socket.emit('messageToServer', reply);
     this.scrollToBottom();
