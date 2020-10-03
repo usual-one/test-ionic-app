@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import * as io from 'socket.io-client';
+import { Socket } from 'ngx-socket-io'
 
 import { Reply } from '../interfaces/reply';
 
@@ -9,15 +9,13 @@ import { Reply } from '../interfaces/reply';
 })
 export class ChatClientService {
   
-  private socketClient: SocketIOClient.Socket;
-
   public username: string = "";
 
-  constructor() { 
+  constructor(private socketClient: Socket) { 
   }
 
   public connect(): void {
-    this.socketClient = io.connect(`${environment.backendHost}:${environment.backendPort}`);
+    this.socketClient.connect();
   }
 
   public sendMessage(message: string): void {
