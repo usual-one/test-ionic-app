@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import * as io from 'socket.io-client';
+import { environment } from '../../environments/environment';
+
+import { Reply } from '../interfaces/reply';
+import { ChatClientService } from '../core/chat-client.service';
 
 @Component({
   selector: 'app-home',
@@ -10,26 +13,18 @@ export class HomePage {
 
   @ViewChild('content') private content: any;
 
-  public userName: string;
-
-  public currentMessage: string;
+  public currentMessage = "";
   
-  public replies: object[];
+  public replies: Reply[] = [];
 
-  private socket: SocketIOClient.Socket;
-
-  constructor() {
-    this.userName = 'usual_one';
-    this.currentMessage = "";
-    this.replies = [];
-    this.socket = io.connect('http://89.178.239.84:8888');
-  }
+  constructor(private chat: ChatClientService) {}
 
   ngOnInit() {
-    this.socket.on('connect', () => {});
+    this.chat.connect();
+    this.chat.username = environment.chatUsername;
 
-    this.socket.on('messageToClient', reply => {
-      this.receive(reply); 
+    this.chat.setReceivingCallback(reply => {
+      this.receive(reply);
     });
   }
 
@@ -42,19 +37,13 @@ export class HomePage {
     this.currentMessage = "";
   }
 
-  public sendMessage(_message: string): void {
-    if (!_message) {
-      return;
-    }
-    const reply = {
-      nickname: this.userName,
-      message: _message
-    };
-    this.socket.emit('messageToServer', reply);
+  public sendMessage(message: string): void {
+    this.chat.sendMessage(message);
     this.scrollToBottom();
   }
 
-  public receive(reply): void {
+  public receive(reply: Reply): void {
     this.replies.push(reply);
+    this.scrollToBottom();
   }
 }

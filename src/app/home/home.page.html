@@ -8,7 +8,7 @@
 
 <ion-content #content>
   <div class="reply-container" *ngFor="let reply of replies">
-    <div [ngClass]="{'reply': true, 'self-reply': reply.nickname === userName}">
+    <div [ngClass]="{'reply': true, 'self-reply': reply.nickname === chat.username}">
       <span class="reply-nickname">
         {{ reply.nickname }}: 
       </span>
